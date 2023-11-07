@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.editIndex = async function (req, res) {
+exports.editIndex = async (req, res) => {
     if (!req.params.id) return res.render('404');
 
     const contato = await Contato.buscaPorId(req.params.id);
@@ -35,8 +35,7 @@ exports.editIndex = async function (req, res) {
     res.render('contato', { contato });
 };
 
-exports.edit = async function (req, res) {
-
+exports.edit = async (req, res) => {
     try {
         if (!req.params.id) return res.render('404');
         const contato = new Contato(req.body);
@@ -44,16 +43,15 @@ exports.edit = async function (req, res) {
 
         if (contato.errors.length > 0) {
             req.flash('errors', contato.errors);
-            req.session.save(() => res.redirect(`/contato/${contato.contato._id}`));
+            req.session.save(() => res.redirect(`/contato/${req.params.id}`)); // Usar req.params.id
             return;
         }
 
         req.flash('success', 'Contato editado com sucesso.');
-        req.session.save(() => res.redirect(`/contato/${contato.contato._id}`));
-        return;
     } catch (error) {
         console.log(error);
-        return res.render(404)
+        req.flash('errors', ['Erro interno no servidor.']);
     }
 
+    req.session.save(() => res.redirect(`/contato/${req.params.id}`)); // Usar req.params.id
 };
