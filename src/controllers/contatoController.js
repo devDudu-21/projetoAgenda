@@ -22,17 +22,23 @@ exports.register = async (req, res) => {
         return;
     } catch (e) {
         console.log(e);
-        return res.render('404');
+        return req.flash('errors', 'Não foi possível registrar o contato.')
     }
 };
 
 exports.editIndex = async (req, res) => {
-    if (!req.params.id) return res.render('404');
+    try {
+        if (!req.params.id) return res.render('404');
 
-    const contato = await Contato.buscaPorId(req.params.id);
-    if (!contato) return res.render('404');
+        const contato = await Contato.buscaPorId(req.params.id);
+        if (!contato) return res.render('404');
 
-    res.render('contato', { contato });
+        res.render('contato', { contato });
+    } catch (error) {
+        console.log(error)
+        return res.render('404')
+    }
+
 };
 
 exports.edit = async (req, res) => {
@@ -50,8 +56,25 @@ exports.edit = async (req, res) => {
         req.flash('success', 'Contato editado com sucesso.');
     } catch (error) {
         console.log(error);
-        req.flash('errors', ['Erro interno no servidor.']);
+        return req.flash('errors', 'Não foi possível editar o contato');
     }
 
     req.session.save(() => res.redirect(`/contato/${req.params.id}`)); // Usar req.params.id
 };
+
+exports.delete = async function (req, res) {
+    try {
+        if (!req.params.id) return res.render('404');
+
+        const contato = await Contato.delete(req.params.id);
+        if (!contato) return res.render('404');
+
+        req.flash('success', 'Contato excluído com sucesso.')
+        req.session.save(() => res.redirect(`back`));
+        return;
+    } catch (error) {
+        console.log(error)
+        return req.flash('errors', 'Não foi possível excluir o contato.')
+    }
+
+}

@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-mongoose.connect(process.env.CONNECTIONSTRING, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.CONNECTIONSTRING, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     app.emit('pronto');
   })
@@ -51,3 +51,5 @@ app.on('pronto', () => {
     console.log('Servidor executando na porta 3000');
   });
 });
+
+
