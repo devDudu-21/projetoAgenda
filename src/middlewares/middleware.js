@@ -8,9 +8,7 @@ exports.outroMiddleware = (req, res, next) => {
   next();
 };
 exports.checkCsrfError = (err, req, res, next) => {
-  if (err) {
-    return res.render('404');
-  }
+  if (err) return res.render('404');
   next();
 };
 exports.csrfMiddleware = (req, res, next) => {
@@ -24,6 +22,5 @@ exports.loginRequired = (req, res, next) => {
     req.session.save(() => res.redirect('/'));
     return;
   }
-
   next();
 };

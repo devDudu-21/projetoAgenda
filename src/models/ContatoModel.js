@@ -48,9 +48,7 @@ class Contato {
 
   cleanUp() {
     for (const key in this.body) {
-      if (typeof this.body[key] !== 'string') {
-        this.body[key] = '';
-      }
+      if (typeof this.body[key] !== 'string') this.body[key] = '';
     }
 
     this.body = {
@@ -74,13 +72,11 @@ class Contato {
 // Métodos estáticos
 Contato.buscaPorId = async (id) => {
   if (typeof id !== 'string') return;
-
   const contato = await ContatoModel.findById(id);
   return contato;
 };
 
 Contato.buscaContatos = async () => {
-
   const contatos = await ContatoModel.find()
     .sort({ criadoEm: -1 });
   return contatos;
