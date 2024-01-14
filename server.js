@@ -46,7 +46,7 @@ app.use(csrfMiddleware);
 app.use(routes);
 const port = process.env.APP_PORT
 app.on('pronto', () => {
-  app.listen(3000);
+  app.listen(port);
 });
 
 
